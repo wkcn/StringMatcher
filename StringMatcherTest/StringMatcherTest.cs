@@ -152,29 +152,71 @@ namespace StringMatcherTest
         private int add_special_string(ref string value, ref string buffer, ref bool true_sample)
         {
             if (buffer.Length == 0) return 0;
-            bool has_more = false;
-            int lower = 0;
-            foreach (char c in buffer)
+            int num_add = 0;
+            int num_ques = 0;
+            char c = buffer[0];
+            if (c == '+') ++num_add;
+            if (c == '?') ++num_ques;
+            for (int i = 1; i < buffer.Length; ++i)
             {
-                if (c == '?'){
-                    ++lower;
-                }
-                else if (c == '+')
+                char p = buffer[i];
+                if (c == '+')
                 {
-                    ++lower;
-                    has_more = true;
-                }else if (c == '*') has_more = true;
+                    if (p == '+') ++num_add;
+                    else if (p == '?') ++num_add;
+                    else if (p == '*') { };
+                }
+                else if (c == '*')
+                {
+                    if (p == '+') { ++num_add; c = '+'; }
+                    else if (p == '?') { ++num_add; c = '+'; }
+                    else if (p == '*') { };
+                }
+                else if (c == '?')
+                {
+                    if (p == '+') { num_add += 1 + num_ques; c = '+'; num_ques = 0; }
+                    else if (p == '?') ++num_ques;
+                    else if (p == '*') { num_add += num_ques; c = '+'; num_ques = 0; };
+                }
             }
-            int delta = random.Next(lower > 2 ? -2 : -lower, 3);
-            int w = lower + delta;
-            for (int u = 0; u < w; ++u)
+
+            bool hasmore = false;
+            int lower = 0;
+            if (c == '+')
+            {
+                hasmore = true;
+                lower = num_add;
+            }
+            else if (c == '*')
+            {
+                hasmore = true;
+            }
+            else if (c == '?')
+            {
+                lower = num_ques;
+            }
+
+            int delta = random.Next(lower > 2 ? -lower : 2, 3);
+
+            delta = 0; // 还需要完善
+
+            int siz = delta + lower;
+            for (int i = 0; i < siz; ++i)
             {
                 value += get_random_alpha();
             }
-            if (delta < 0) true_sample = false;
-            if (delta > 0 && !has_more) true_sample = false;
+            if (delta < 0)
+            {
+                true_sample = false;
+            }
+            if (delta > 0 && !hasmore)
+            {
+                true_sample = false;
+            }
+            // Console.Write("{0},{1},{2},{3},{4},{5} - ", c, num_add, num_ques,siz,buffer,true_sample);
             buffer = "";
-            return w;
+
+            return siz;
         }
 
         private void RandomTestOnce(int[] record) 
@@ -183,6 +225,7 @@ namespace StringMatcherTest
             string pattern = "";
             string value = "";
             bool true_sample = true;
+            int false_i = -1;
             bool escape_wrong = false;
             bool star_sample = false;
             bool add_sample = false;
@@ -192,6 +235,12 @@ namespace StringMatcherTest
             string buffer = ""; // 用于记录特殊符号*+?
             for (int i = 0; i < len; ++i)
             {
+                if (!true_sample && false_i == -1)
+                {
+                    false_i = i;
+                    break;
+                }
+
                 int r = random.Next(0, 100);
                 if (0 <= r && r < 10)
                 {
@@ -279,7 +328,7 @@ namespace StringMatcherTest
 
             try
             {
-                Console.WriteLine("{0}, {1}, [ANSWER]: {2}, exception: {3}", pattern, value, true_sample, escape_wrong);
+                Console.WriteLine("{0}, {1}, [ANSWER]: {2}, exception: {3}, false_i: {4}", pattern, value, true_sample, escape_wrong,false_i);
                 Assert.AreEqual(StringMatcher.Match(pattern, value), true_sample);
                 Assert.AreEqual(escape_wrong, false);
             }
