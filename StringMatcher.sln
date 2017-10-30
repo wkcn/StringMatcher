@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringMatcher", "StringMatcher.csproj", "{3F46CFC7-683D-4BC8-A1F7-9FCE0F84B6F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringMatcherTest", ".\StringMatcherTest\StringMatcherTest.csproj", "{61697D96-5B0E-4393-9CAD-B1F7F8D383D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F46CFC7-683D-4BC8-A1F7-9FCE0F84B6F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F46CFC7-683D-4BC8-A1F7-9FCE0F84B6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F46CFC7-683D-4BC8-A1F7-9FCE0F84B6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F46CFC7-683D-4BC8-A1F7-9FCE0F84B6F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61697D96-5B0E-4393-9CAD-B1F7F8D383D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61697D96-5B0E-4393-9CAD-B1F7F8D383D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61697D96-5B0E-4393-9CAD-B1F7F8D383D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61697D96-5B0E-4393-9CAD-B1F7F8D383D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
