@@ -111,6 +111,7 @@ namespace StringMatcherTest
         public void TestSpecial()
         {
             Assert.AreEqual(StringMatcher.Match(@"*?Mc\\l", @"ctUVUdLMc\l"), true);
+            Assert.AreEqual(StringMatcher.Match("*", "aa"), true);
         }
 
         // 测试样本指标(近似值)：

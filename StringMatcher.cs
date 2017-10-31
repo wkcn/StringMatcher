@@ -23,7 +23,58 @@ namespace StringMatcherNS
         {
             // 首先检查是否存在\a等错误转义
             CheckPatternFormat(pattern);
-            return MatchIn(pattern, value, 0, 0);
+            // 使用递归的时间复杂度为O(mn), 太慢了
+            // return MatchIn(pattern, value, 0, 0);
+            int i = 0; // the index of pattern
+            int j = 0; // the index of value
+            int star = -1;
+            int star_vi = -1;
+
+            while (j < value.Length)
+            {
+                char p = (char)0;
+                if (i < pattern.Length)p = pattern[i];
+                char c = value[j];
+                if (p == '\\')
+                {
+                    if (i + 1 >= pattern.Length) throw new FormatException(ESCAPE_CHARACTER_ERROR);
+                    p = pattern[++i];
+                    if (p != '\\' && p != '?' && p != '+' && p != '*') throw new FormatException(ESCAPE_CHARACTER_ERROR);
+                }
+                else
+                {
+                    if (p == '?')
+                    {
+                        ++i;
+                        ++j;
+                        continue;
+                    }
+                    if (p == '*')
+                    {
+                        star = ++i; // 记录*在pattern中的index
+                        star_vi = j;
+                        continue;
+                    }
+                    if (p == '+')
+                    {
+                        star = ++i; // 记录*在pattern中的index
+                        star_vi = ++j;
+                        continue;
+                    }
+                }
+                if (p == c)
+                {
+                    ++i;
+                    ++j;
+                    continue;
+                }
+                if (star == -1) return false; // no star
+                i = star; // 退回上次star的位置
+                j = ++star_vi;
+            }
+
+            while (i < pattern.Length && pattern[i] == '*') ++i;
+            return (i >= pattern.Length && j >= value.Length);
         }
 
         // 检查pattern是否合法（转义符是否正确）
